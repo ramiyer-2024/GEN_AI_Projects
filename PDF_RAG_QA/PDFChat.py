@@ -165,15 +165,15 @@ if api_key:
             )
             
             # Log the embeddings
-            # embeddings = response.get('embeddings', [])
-            # logging.debug(f"Embeddings: {embeddings}")
+            embeddings = response.get('embeddings', [])
+            logging.debug(f"Embeddings: {embeddings}")
             
-            # if not embeddings:
-            #     st.error("Embeddings are empty. Please check the embedding generation process.")
-            # else:
-            #     st.write(st.session_state.store)
-            #     st.write("Assistant:", response['answer'])
-            #     st.write("Chat History:", session_history.messages)
+            if not embeddings:
+                st.error("Embeddings are empty. Please check the embedding generation process.")
+            else:
+                st.write(st.session_state.store)
+                st.write("Assistant:", response['answer'])
+                st.write("Chat History:", session_history.messages)
 
             st.write(st.session_state.store)
             st.write("Assistant:", response['answer'])
