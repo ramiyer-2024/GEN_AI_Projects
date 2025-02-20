@@ -71,14 +71,17 @@ def create_ensemble_retriever(docs):
     hybrid_retriever = EnsembleRetriever(retrievers=[faiss_retriever, bm25_retriever], weights=[0.7, 0.3])
     return hybrid_retriever
 
-def rerank_results(user_input, retrived_docs):
-    doc_texts = [doc.page_content for doc in retrived_docs]
-    results = cohere_client.rerank(query=user_input, documents=doc_texts, model="rerank-english-v2.0", top_n=3)
-    ranked_docs = [retrived_docs[result.index] for result in results]
-    return ranked_docs
+# def rerank_results(user_input, retrived_docs):
+#     doc_texts = [doc.page_content for doc in retrived_docs]
+#     results = cohere_client.rerank(query=user_input, documents=doc_texts, model="rerank-english-v2.0", top_n=3)
+#     ranked_docs = [retrived_docs[result.index] for result in results]
+#     return ranked_docs
 
 
 def get_session_history(session:str)->BaseChatMessageHistory:
+    if 'store' not in st.session_state:
+        st.session_state.store={}
+
     if session_id not in st.session_state.store:
         st.session_state.store[session_id]=ChatMessageHistory()
     return st.session_state.store[session_id]
@@ -165,25 +168,16 @@ if api_key:
             )
             
             # Log the embeddings
-            embeddings = response.get('embeddings', [])
-            logging.debug(f"Embeddings: {embeddings}")
+            # embeddings = response.get('embeddings', [])
+            # logging.debug(f"Embeddings: {embeddings}")
             
-            if not embeddings:
-                st.error("Embeddings are empty. Please check the embedding generation process.")
-            else:
-                st.write(st.session_state.store)
-                st.write("Assistant:", response['answer'])
-                st.write("Chat History:", session_history.messages)
+            # if not embeddings:
+            #     st.error("Embeddings are empty. Please check the embedding generation process.")
+            # else:
+            #     st.write(st.session_state.store)
+            #     st.write("Assistant:", response['answer'])
+            #     st.write("Chat History:", session_history.messages)
 
             st.write(st.session_state.store)
             st.write("Assistant:", response['answer'])
             st.write("Chat History:", session_history.messages)
-
-
-
-
-
-
-
-
-

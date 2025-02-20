@@ -34,3 +34,7 @@ PyPDF2
 rouge_score
 cohere
 rank_bm25
+fitz
+pytesseract
+pdf2image
+frontend
